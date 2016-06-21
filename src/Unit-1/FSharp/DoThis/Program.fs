@@ -31,5 +31,6 @@ let main argv =
     // tell the consoleReader actor to begin
     // YOU NEED TO FILL IN HERE
 
-    myActorSystem.AwaitTermination ()
+    myActorSystem.WhenTerminated.Wait()
+
     0

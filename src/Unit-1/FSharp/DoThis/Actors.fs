@@ -11,17 +11,12 @@ module Actors =
     | Message of string
     | Exit
 
-    let (|Message|Exit|) (str:string) =
-        match str.ToLower() with
-        | "exit" -> Exit
-        | _ -> Message(str)
-
 
     let consoleReaderActor (consoleWriter: IActorRef) (mailbox: Actor<_>) message = 
         let line = Console.ReadLine ()
-        match line with
-        | Exit -> mailbox.Context.System.Shutdown ()
-        | Message(input) -> 
+        match line.ToLower() with
+        | "exit" -> mailbox.Context.System.Shutdown ()
+        | input -> 
             // send input to the console writer to process and print
             // YOU NEED TO FILL IN HERE
 
@@ -36,7 +31,11 @@ module Actors =
             Console.WriteLine (message.ToString ())
             Console.ResetColor ()
 
-        match message.ToString().Length with
-        | 0    -> printInColor ConsoleColor.DarkYellow "Please provide an input.\n"
-        | Even -> printInColor ConsoleColor.Red "Your string had an even # of characters.\n"
-        | Odd  -> printInColor ConsoleColor.Green "Your string had an odd # of characters.\n"
+        match message with
+        | Message input ->
+            match input.Length with 
+                | 0    -> printInColor ConsoleColor.DarkYellow "Please provide an input.\n"
+                | Even -> printInColor ConsoleColor.Red "Your string had an even # of characters.\n"
+                | Odd  -> printInColor ConsoleColor.Green "Your string had an odd # of characters.\n"
+        | _ ->
+            raise (System.Exception("Unexpected code"))            
