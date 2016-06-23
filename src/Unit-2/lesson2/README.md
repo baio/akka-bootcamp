@@ -235,6 +235,12 @@ type CounterMessage =
 | SubscribeCounter of subscriber: IActorRef
 | UnsubscribeCounter of subscriber: IActorRef
 
+type ChartMessage = 
+| InitializeChart of initialSeries: Map<string, Series>
+| AddSeries of series: Series
+| RemoveSeries of seriesName: string
+| Metric of series: string * counterValue: float
+
 type CoordinationMessage =
 | Watch of counter: CounterType
 | Unwatch of counter: CounterType
